@@ -9,15 +9,7 @@
 
 [npm-image]: https://img.shields.io/npm/v/new-wechat-tools.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/new-wechat-tools
-[travis-image]: https://img.shields.io/travis/eggjs/new-wechat-tools.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/new-wechat-tools
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/new-wechat-tools.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/new-wechat-tools?branch=master
-[david-image]: https://img.shields.io/david/eggjs/new-wechat-tools.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/new-wechat-tools
-[snyk-image]: https://snyk.io/test/npm/new-wechat-tools/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/new-wechat-tools
-[download-image]: https://img.shields.io/npm/dm/new-wechat-tools.svg?style=flat-square
 [download-url]: https://npmjs.org/package/new-wechat-tools
 
 <!--
@@ -29,31 +21,6 @@ Description here.
 ```bash
 $ npm i new-wechat-tools --save
 ```
-
-## Usage
-
-```js
-exports.wechatAll = {
-  appid: '',
-  appsecret: '',
-  token: '',
-  encodingAESKey: '',
-  payment: {
-    partnerKey: '',
-    mchId: '',
-    notifyUrl: '',
-    pfx: '',
-  },
-  modules: {
-    message: true,  // enable or disable co-wechat
-    api: true,  // enable or disable co-wechat-api
-    oauth: true,  // enable or disable co-wechat-oauth
-    payment: true,  // enable or disable co-wechat-payment
-  },
-;
-```
-
-see [config/config.default.js](config/config.default.js) for more details.
 
 ## How
 
@@ -74,7 +41,7 @@ For more details, please refer to the following links.
 
 [co-wechat-payment] (https://github.com/perzy/co-wechat-payment)
 
-## Example
+## Example & Usage
 
 ```js
 const path = require('path')
