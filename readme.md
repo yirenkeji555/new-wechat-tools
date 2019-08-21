@@ -1,12 +1,6 @@
 # new-wechat-tools
 
 [![NPM version][npm-image]][npm-url]
-[![npm download][download-image]][download-url]
-
-[npm-image]: https://img.shields.io/npm/v/new-wechat-tools.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/new-wechat-tools
-[snyk-url]: https://snyk.io/test/npm/new-wechat-tools
-[download-url]: https://npmjs.org/package/new-wechat-tools
 
 <!--
 Description here.
