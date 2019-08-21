@@ -1,0 +1,30 @@
+{
+  "name": "wechat-all",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "co-wechat": "^2.3.0",
+    "co-wechat-api": "^3.3.3",
+    "co-wechat-oauth": "^2.0.1",
+    "co-wechat-payment": "^0.2.0",
+    "redis": "^2.8.0",
+    "request": "^2.75.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yirenkeji555/wechat-all.git"
+  },
+  "keywords": [
+    "weixin",
+    "wechat",
+    "小程序",
+    "微信",
+    "微信支付"
+  ],
+  "author": "Excel",
+  "license": "ISC"
+}
