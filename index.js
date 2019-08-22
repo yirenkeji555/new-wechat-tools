@@ -3,8 +3,8 @@
 const wechat = require('co-wechat');
 const WechatApi = require('co-wechat-api');
 const OAuth = require('co-wechat-oauth');
-const Payment = require('co-wechat-payment');
 const MiniApp = require('./lib/mini_app');
+const Payment = require('./lib/wechat_pay/index');
 
 function WechatAll (config) {
     this.config = config
@@ -67,9 +67,7 @@ function WechatAll (config) {
     }
 
     if (config.payment) {
-        this.payment = new Payment(Object.assign({}, {
-            appId: config.payment.appid,
-        }, config.payment));
+        this.payment = new Payment(config.payment);
     }
 
 }
