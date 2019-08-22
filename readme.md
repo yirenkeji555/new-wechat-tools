@@ -32,6 +32,7 @@ For more details, please refer to the following links.
 [co-wechat-oauth] (https://github.com/node-webot/co-wechat-oauth)
 
 Payment method:
+```js
   // 获取JS支付参数(自动下单)
   async getPayParams(params) {
     params.trade_type = params.trade_type || 'JSAPI';
@@ -245,7 +246,7 @@ Payment method:
 
     return this._request(pkg, 'refundquery');
   }
-
+```
 
 ## Example & Usage
 
