@@ -5,20 +5,51 @@ const WechatApi = require('co-wechat-api');
 const OAuth = require('co-wechat-oauth');
 const Payment = require('co-wechat-payment');
 const MiniApp = require('./lib/mini_app');
-const redis = require("redis")
-const Cache = require('./lib/cache')
-
 
 function WechatAll (config) {
     this.config = config
-    const client = redis.createClient(this.config.redis)
-    const cache = new Cache(client);
+    let appId = ''
+    const redis = require("redis")
+    if (!config.redis){
+        config.redis = {}
+    }
+    const redisClient = redis.createClient(config.redis)
+    redisClient.set('hello_redis','excel')
+    const getAccessToken = async function () {
+        const raw = await redisClient.get(appId + 'wechat_access_token');
+        return JSON.parse(raw);
+    }
+
+    const setAccessToken = async function (token) {
+        return await redisClient.set(appId + 'wechat_access_token', JSON.stringify(token));
+    }
+
+    const getTicketToken = async function (type) {
+        const raw = await redisClient.get(appId + `wechat_ticket_${type}`);
+        return JSON.parse(raw);
+    }
+
+    const setTicketToken = async function (type, token) {
+        return await redisClient.set(appId + `wechat_ticket_${type}`, JSON.stringify(token));
+    }
+
+
+    const getOAuthToken = async function (openid) {
+        const raw = await redisClient.get(appId + `wechat_oauth_${openid}`);
+        return JSON.parse(raw);
+    }
+
+    const setOAuthToken = async function (openid, token) {
+        return await redisClient.set(appId + `wechat_oauth_${openid}`, JSON.stringify(token));
+    }
+
     if (config.miniapp) {
         this.miniapp = new MiniApp(config.miniapp)
     }
 
     if (config.oauth) {
-        this.oauth = new OAuth(config.oauth.appid, config.oauth.appsecret, cache.getOAuthToken, cache.setOAuthToken);
+        appId = config.oauth.appid
+        this.oauth = new OAuth(config.oauth.appid, config.oauth.appsecret, getOAuthToken, setOAuthToken);
     }
     if (config.message) {
         const msgWechat = wechat({
@@ -29,8 +60,9 @@ function WechatAll (config) {
         this.message = msgWechat.middleware.bind(msgWechat);
     }
     if (config.api) {
-        const api = new WechatApi(config.appid, config.appsecret, cache.getAccessToken, cache.setAccessToken);
-        api.registerTicketHandle(cache.getTicketToken, cache.setTicketToken);
+        appId = config.api.appid
+        const api = new WechatApi(config.api.appid, config.api.appsecret, getAccessToken, setAccessToken);
+        api.registerTicketHandle(getTicketToken, setTicketToken);
         this.api = api
     }
 
