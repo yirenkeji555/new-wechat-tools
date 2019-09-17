@@ -1,6 +1,6 @@
 {
   "name": "new-wechat-tools",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "最新微信工具包，包含小程序",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
     "微信",
     "微信支付",
     "人脸支付",
-    "免密支付"
+    "免密支付",
+    "模板消息"
   ],
   "author": "Excel",
   "license": "ISC"

@@ -13,10 +13,15 @@ function WechatAll (config) {
     if (!config.redis){
         config.redis = {}
     }
+    
     const redisClient = redis.createClient(config.redis)
-    redisClient.set('hello_redis','excel')
     const getAccessToken = async function () {
-        const raw = await redisClient.get(appId + 'wechat_access_token');
+        const raw = await new Promise(function (resolve, reject) {
+            redisClient.get(appId + 'wechat_access_token', function (err, value) {
+                if (err) throw err;
+                resolve(value);
+            })
+        });
         return JSON.parse(raw);
     }
 
@@ -25,7 +30,12 @@ function WechatAll (config) {
     }
 
     const getTicketToken = async function (type) {
-        const raw = await redisClient.get(appId + `wechat_ticket_${type}`);
+        const raw = await new Promise(function (resolve, reject) {
+            redisClient.get(appId + `wechat_ticket_${type}`, function (err, value) {
+                if (err) throw err;
+                resolve(value);
+            })
+        });
         return JSON.parse(raw);
     }
 
@@ -35,16 +45,32 @@ function WechatAll (config) {
 
 
     const getOAuthToken = async function (openid) {
-        const raw = await redisClient.get(appId + `wechat_oauth_${openid}`);
+        const raw = await new Promise(function (resolve, reject) {
+            redisClient.get(appId + `wechat_oauth_${openid}`, function (err, value) {
+                if (err) throw err;
+                resolve(value);
+            })
+        });
         return JSON.parse(raw);
     }
 
     const setOAuthToken = async function (openid, token) {
         return await redisClient.set(appId + `wechat_oauth_${openid}`, JSON.stringify(token));
     }
-
+    const setMiniAppAccessToken = async function (appId, token, expiresTime = 7200) {
+        return await redisClient.set(appId + `miniapp_token`, JSON.stringify(token), 'EX', expiresTime);
+    }
+    const getMiniAppAccessToken = async function (appId) {
+        const raw = await new Promise(function (resolve, reject) {
+            redisClient.get(appId + `miniapp_token`, function (err, value) {
+                if (err) throw err;
+                resolve(value);
+            })
+        });
+        return JSON.parse(raw);
+    }
     if (config.miniapp) {
-        this.miniapp = new MiniApp(config.miniapp)
+        this.miniapp = new MiniApp(config.miniapp, setMiniAppAccessToken, getMiniAppAccessToken)
     }
 
     if (config.oauth) {
