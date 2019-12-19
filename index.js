@@ -7,66 +7,95 @@ const MiniApp = require('./lib/mini_app');
 const Payment = require('./lib/wechat_pay/index');
 
 function WechatAll (config) {
-    this.config = config
     let appId = ''
-    const redis = require("redis")
-    if (!config.redis){
-        config.redis = {}
+    let redisConfig = config.redis
+    if (!redisConfig) {
+        redisConfig = {}
     }
     
-    const redisClient = redis.createClient(config.redis)
     const getAccessToken = async function () {
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
         const raw = await new Promise(function (resolve, reject) {
             redisClient.get(appId + 'wechat_access_token', function (err, value) {
                 if (err) throw err;
                 resolve(value);
             })
         });
+        redisClient.quit()
         return JSON.parse(raw);
     }
 
     const setAccessToken = async function (token) {
-        return await redisClient.set(appId + 'wechat_access_token', JSON.stringify(token));
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
+        let rs = await redisClient.set(appId + 'wechat_access_token', JSON.stringify(token));
+        redisClient.quit()
+        return rs
     }
 
     const getTicketToken = async function (type) {
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
         const raw = await new Promise(function (resolve, reject) {
             redisClient.get(appId + `wechat_ticket_${type}`, function (err, value) {
                 if (err) throw err;
                 resolve(value);
             })
         });
+        redisClient.quit()
         return JSON.parse(raw);
     }
 
     const setTicketToken = async function (type, token) {
-        return await redisClient.set(appId + `wechat_ticket_${type}`, JSON.stringify(token));
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
+        const rs =  await redisClient.set(appId + `wechat_ticket_${type}`, JSON.stringify(token));
+        redisClient.quit()
+        return rs
     }
 
 
     const getOAuthToken = async function (openid) {
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
         const raw = await new Promise(function (resolve, reject) {
             redisClient.get(appId + `wechat_oauth_${openid}`, function (err, value) {
                 if (err) throw err;
                 resolve(value);
             })
         });
+        redisClient.quit()
         return JSON.parse(raw);
     }
 
     const setOAuthToken = async function (openid, token) {
-        return await redisClient.set(appId + `wechat_oauth_${openid}`, JSON.stringify(token));
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig)
+        const rs = await redisClient.set(appId + `wechat_oauth_${openid}`, JSON.stringify(token));
+        redisClient.quit()
+        return rs
     }
     const setMiniAppAccessToken = async function (appId, token, expiresTime = 7200) {
-        return await redisClient.set(appId + `miniapp_token`, JSON.stringify(token), 'EX', expiresTime);
+        const redis = require("redis")
+        console.log('createClient')
+        const redisClient = redis.createClient(redisConfig) 
+        console.log('createClient in ', redisClient)
+        const rs = await redisClient.set(appId + `miniapp_token`, JSON.stringify(token), 'EX', expiresTime);
+        redisClient.quit()
+        console.log('createClient quit ', redisClient)
+        return rs
     }
     const getMiniAppAccessToken = async function (appId) {
+        const redis = require("redis")
+        const redisClient = redis.createClient(redisConfig) 
         const raw = await new Promise(function (resolve, reject) {
             redisClient.get(appId + `miniapp_token`, function (err, value) {
                 if (err) throw err;
                 resolve(value);
             })
         });
+        redisClient.quit()
         return JSON.parse(raw);
     }
     if (config.miniapp) {
